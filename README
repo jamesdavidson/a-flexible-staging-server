@@ -7,3 +7,5 @@ Then using Git, push code with Dockerfiles to have them run as a
 container. Branch master gets linked to port 80, everything else gets
 assigned a psuedorandom port number in the 33000-34000 range
 (arbritarily chosen).
+
+Requires: Ansible ~v1.4.
