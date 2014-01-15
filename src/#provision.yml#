@@ -1,0 +1,14 @@
+---
+- hosts: local
+  connection: local
+  gather_facts: false
+  tasks:
+  - name: Launch ansible cloudformation example.
+    cloudformation: 
+
+    action: cloudformation stack_name="ansible-cloudformation" state=present region=ap-southeast-2 disable_rollback=yes template=cloudformation-tmp.json
+    args:
+      template_parameters:
+        KeyName: hd-hacking
+      tags:
+        Stack: ansible-cloudformation
