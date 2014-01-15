@@ -1,11 +1,24 @@
 ## A Flexible Staging Server
 
-Using Ansible, provision an ArchLinux box running Docker with a git
-repo and a post-receive hook (Ruby script).
+# The Problem
 
-Then using Git, push code with Dockerfiles to have them run as a
-container. Branch master gets linked to port 80, everything else gets
-assigned a psuedorandom port number in the 33000-34000 range
-(arbritarily chosen).
+Staging stuff on Heroku to test changes is too slow.
+
+# The Solution
+
+A blueprint for a staging server on Amazon EC2 (in your nearest data center).
+Just add your AWS token and secret key to the config and set Ansible to work.
+Soon thereafter, the server will be ready to receive code and run it.
+
+# Details
+
+Firstly, using the CloudFormation blueprint, Ansible provisions a single Linux
+instance (with all the security groups and access keys and stuff) and configures
+it to act as a git+docker server.
+
+Secondly, push code which has a Dockerfile, wait as it gets built and assigned a
+TCP port number. Then access the container at http://<instance-hostname>:$PORT/.
 
 Requires: Ansible ~v1.4.
+
+License: MIT.
