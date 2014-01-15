@@ -1,0 +1,17 @@
+---
+- hosts: server
+  gather_facts: false
+  vars:
+    http_port: 80
+    max_clients: 200
+  remote_user: root
+  tasks:
+  - name: Install Python2
+    raw: pacman -S --noconfirm python2 && rm /usr/bin/python && ln -s $(which python2) /usr/bin/python
+  - name: Ensure Docker is the latest version.
+    pacman: pkg=docker state=installed
+#  - name: write the apache config file
+#    template: src=/srv/httpd.j2 dest=/etc/httpd.conf
+#  - name: ensure apache is running
+#    service: name=httpd state=restarted
+
