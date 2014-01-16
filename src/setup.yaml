@@ -29,11 +29,11 @@
   - name: Install Python2.
     raw: pacman -S --noconfirm python2
 
-  - name: Ensure Docker is the latest version.
-    pacman: name=docker state=installed
+  - name: Ensure Docker, Git and Ruby are installed.
+    pacman: name=docker,git,ruby state=installed
 
-  - name: Ensure Git is the latest version.
-    pacman: name=git state=installed
-
-  - name: Ensure the git repo exists.
+  - name: Ensure the Git repo exists.
     unarchive: src=blank-repo.tar dest=/root
+
+  - name: Ensure the post-receive hook is in place.
+    copy: src=post-receive.rb dest=/root/repo.git/hooks/post-receive owner=root group=root mode=0744
