@@ -12,5 +12,7 @@
     args:
       template_parameters:
         KeyName: hd-hacking
-      tags:
-        Stack: ansible-cloudformation
+    register: stack
+
+  - name: Show stack outputs.
+    debug: msg={{stack.stack_outputs['PublicIP']}}
