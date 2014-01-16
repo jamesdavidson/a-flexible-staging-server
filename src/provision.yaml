@@ -23,5 +23,23 @@
   gather_facts: false
   tasks:
   - name: Update the package manager.
-    pacman: name=docker state=installed update_cache=yes
+    raw: pacman -Sy --noconfirm
+
+  - name: Install Python2.
+    raw: pacman -S --noconfirm python2
+
+  - name: Remove the old Python.
+    file: path=/usr/bin/python state=absent
+
+  - name: Symlink Python2 to Python
+    file: src=/usr/bin/python dest=/usr/bin/python2 state=link
+
+  - name: Ensure Docker is the latest version.
+    pacman: name=docker state=installed
+
+#  - name: write the apache config file
+#    template: src=/srv/httpd.j2 dest=/etc/httpd.conf
+#  - name: ensure apache is running
+#    service: name=httpd state=restarted
+
 
