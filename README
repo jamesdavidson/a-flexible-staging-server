@@ -27,11 +27,12 @@ this in the IAM section of the management console:
 http://console.aws.amazon.com/iam
 
 You will need an AWS token and secret in your ~/.boto file for
-[boto](https://github.com/boto/boto) (the AWS library that Ansible uses
-under-the-hood). See the boto wiki for more
-information: http://code.google.com/p/boto/wiki/BotoConfig#Example.
+[boto](https://github.com/boto/boto) (the open-source library that Ansible
+uses). See the boto wiki for more information:
+http://docs.pythonboto.org/en/latest/boto_config_tut.html.
 
 # Usage
+
 Firstly, using the CloudFormation blueprint, Ansible provisions a single Linux
 instance (with all the security groups and access keys and stuff) and configures
 it to act as a git+docker server.
