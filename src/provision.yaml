@@ -11,8 +11,17 @@
                     template=cloud-formation.json
     args:
       template_parameters:
-        KeyName: hd-hacking
+        KeyName: mbp
     register: stack
 
-  - name: Show stack outputs.
-    debug: msg={{stack.stack_outputs['PublicIP']}}
+  - name: Add host to temporary inventory.
+    add_host: name={{ stack.stack_outputs['PublicIP'] }}
+              groups=just_created
+              ansible_ssh_user=root
+
+- hosts: just_created
+  gather_facts: false
+  tasks:
+  - name: Update the package manager.
+    pacman: name=docker state=installed update_cache=yes
+
