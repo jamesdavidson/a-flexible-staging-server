@@ -31,3 +31,9 @@
 
   - name: Ensure Docker is the latest version.
     pacman: name=docker state=installed
+
+  - name: Ensure Git is the latest version.
+    pacman: name=git state=installed
+
+  - name: Ensure the git repo exists.
+    unarchive: src=blank-repo.tar dest=/root
