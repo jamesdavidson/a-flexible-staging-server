@@ -1,17 +1,17 @@
 ## A Flexible Staging Server
 
-# The Problem
+### The Problem
 
 We need a way to hack around with Rails apps and their databases in Docker
 containers. A full staging environment can be slow and inflexible.
 
-# The Solution
+### The Solution
 
 Run an instance on Amazon Web Services. Just authorize Ansible with your secrets
 and use it to run the playbook in this repo. Soon after, an EC2 instance will be
 ready to receive your code and run it in lightweight Docker containers.
 
-# Getting Started
+### Getting Started
 
 Log in to the management console: http://console.aws.amazon.com/. Create a new
 keypair by uploading your public key (~/.ssh/id_rsa.pub) and giving it a
@@ -31,7 +31,7 @@ You will need an AWS token and secret in your ~/.boto file for
 uses). See the boto wiki for more information:
 http://docs.pythonboto.org/en/latest/boto_config_tut.html.
 
-# Usage
+### Usage
 
 Firstly, using the CloudFormation blueprint, Ansible provisions a single Linux
 instance (with all the security groups and access keys and stuff) and configures
@@ -47,7 +47,7 @@ TCP port number. Then access the container at http://<instance-hostname>:$PORT/.
     open http://<hostname>:<port>/index.html
 ```
 
-# Notes
+### Notes
 
 Requires: Ansible ~v1.4.
 License: MIT.
