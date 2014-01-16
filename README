@@ -23,3 +23,5 @@ TCP port number. Then access the container at http://<instance-hostname>:$PORT/.
 Requires: Ansible ~v1.4.
 
 License: MIT.
+
+Includes code by Peter Sankauskas (specifically, ./src/ec2.py).
