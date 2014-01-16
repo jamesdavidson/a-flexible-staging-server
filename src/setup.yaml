@@ -11,7 +11,7 @@
                     template=cloud-formation.json
     args:
       template_parameters:
-        KeyName: mbp
+        KeyName: "{{ keypair }}"
     register: stack
 
   - name: Add host to temporary inventory.
