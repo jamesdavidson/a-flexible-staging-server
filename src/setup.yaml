@@ -8,7 +8,7 @@
                     state=present
                     region=ap-southeast-2
                     disable_rollback=yes
-                    template=cloudformation-tmp.json
+                    template=cloud-formation.json
     args:
       template_parameters:
         KeyName: hd-hacking
