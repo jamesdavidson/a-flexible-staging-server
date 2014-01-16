@@ -18,6 +18,7 @@
     add_host: name={{ stack.stack_outputs['PublicIP'] }}
               groups=just_created
               ansible_ssh_user=root
+              ansible_python_interpreter=/usr/bin/python2
 
 - hosts: just_created
   gather_facts: false
@@ -28,18 +29,5 @@
   - name: Install Python2.
     raw: pacman -S --noconfirm python2
 
-  - name: Remove the old Python.
-    file: path=/usr/bin/python state=absent
-
-  - name: Symlink Python2 to Python
-    file: src=/usr/bin/python dest=/usr/bin/python2 state=link
-
   - name: Ensure Docker is the latest version.
     pacman: name=docker state=installed
-
-#  - name: write the apache config file
-#    template: src=/srv/httpd.j2 dest=/etc/httpd.conf
-#  - name: ensure apache is running
-#    service: name=httpd state=restarted
-
-
