@@ -6,9 +6,10 @@ Staging stuff on Heroku to test changes is too slow.
 
 # The Solution
 
-A blueprint for a staging server on Amazon EC2 (in your nearest data center).
-Just add your AWS token and secret key to the config and set Ansible to work.
-Soon thereafter, the server will be ready to receive code and run it.
+Run your own server on Amazon Web Services. Just add your AWS token and secret
+key to the blueprint configuration and set Ansible to work.  Soon after, the
+server will be ready to receive code and run it in lightweight Docker
+containers.
 
 # Details
 
