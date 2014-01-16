@@ -1,5 +1,0 @@
-[local]
-localhost
-
-[server]
-162.243.236.144
