@@ -2,20 +2,19 @@
 
 ### The Problem
 
-When hacking around with web-apps and databases, spinning up new EC2 instances
-just to test out little changes is cumbersome and fiddly.
+Spinning up new EC2 instances is just to slow and cumbersome.
 
 ### The Solution
 
-A remote git repository which, upon receiving your code, builds and
-runs it in a lightweight Docker container.
+A remote git repository which, upon receiving your code, builds and runs it in a
+lightweight Docker container.
 
 ### The Implementation
 
-This repository has a suitable CloudFormation template and Ansible playbook for
-delivering such a service. Just install Python and Ansible using your favourite package
+This repository has a CloudFormation template and Ansible playbook for setting
+up such a service. Just install Python and Ansible using your favourite package
 manager, supply your Amazon Web Services credentials and then you're off and
-racing!
+racing.
 
 Disclaimer: the code in this repository, if used correctly, will add charges to
 your monthly bill from Amazon! That said however, the resources are neatly
@@ -48,7 +47,7 @@ with all the security groups and access keys and stuff) and configure it to act
 as a git+docker server.
 
 ```bash
-cd src && ansible-playbook setup.yaml -e keypair=YOUR_KEYPAIRS_ID
+cd src && ansible-playbook setup.yaml
 ```
 
 If the playbook runs successfully then you should see an IP address in the
