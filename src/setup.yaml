@@ -8,12 +8,14 @@
   - name: Launch ansible cloudformation example.
     cloudformation: stack_name="ansible-cloudformation"
                     state=present
-                    region=ap-southeast-2
+                    region="{{ region }}"
                     disable_rollback=yes
                     template=cloud-formation.json
     args:
       template_parameters:
         KeyName: "{{ keypair }}"
+        Region: "{{ region }}"
+        AMI: "{{ archlinux_ami_id }}"
     register: stack
 
   - name: Add host to temporary inventory.

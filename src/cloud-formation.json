@@ -82,7 +82,15 @@
     }, 
     "Parameters": {
         "KeyName": {
-            "Description": "Name of an existing EC2 KeyPair to enable SSH access to the instance", 
+            "Description": "Name of an existing EC2 KeyPair to enable SSH access to the instance.", 
+            "Type": "String"
+        },
+        "Region": {
+            "Description": "Name of the AWS data center.", 
+            "Type": "String"
+        },
+        "AMI": {
+            "Description": "The identification number of the Linux AMI, for example: \"ami-8xb87dsf\".", 
             "Type": "String"
         }
     }, 
@@ -90,13 +98,7 @@
         "Ec2Instance": {
             "Properties": {
                 "ImageId": {
-                    "Fn::FindInMap": [
-                        "RegionMap", 
-                        {
-                            "Ref": "AWS::Region"
-                        }, 
-                        "AMI"
-                    ]
+                    "Ref": "AMI"
                 }, 
                 "InstanceType": "t1.micro", 
                 "KeyName": {
