@@ -16,6 +16,8 @@
         KeyName: "{{ keypair }}"
         Region: "{{ region }}"
         AMI: "{{ archlinux_ami_id }}"
+        PortMin: "{{ port_range_min }}"
+        PortMax: "{{ port_range_max }}"
     register: stack
 
   - name: Add the provisioned instance to temporary inventory.

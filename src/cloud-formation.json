@@ -8,6 +8,14 @@
             "Description": "Name of the AWS data center.", 
             "Type": "String"
         },
+        "PortMax": {
+            "Description": "Upper end of the exposed port range.", 
+            "Type": "String"
+        },
+        "PortMin": {
+            "Description": "Lower end of the exposed port range..", 
+            "Type": "String"
+        },
         "AMI": {
             "Description": "The identification number of the Linux AMI, for example: \"ami-8xb87dsf\".", 
             "Type": "String"
@@ -67,6 +75,31 @@
         }
     }, 
     "Resources": {
+        "InstanceSecurityGroup": {
+            "Type": "AWS::EC2::SecurityGroup",
+            "Properties": {
+                "GroupDescription": "Enable access on the port range, SSH and HTTP.",
+                "SecurityGroupIngress": [ {
+                  "IpProtocol" : "tcp",
+                  "FromPort" : { "Ref" : "PortMin" },
+                  "ToPort" : { "Ref" : "PortMax" },
+                  "CidrIp" : "0.0.0.0/0"
+                  },
+                  {
+                  "IpProtocol" : "tcp",
+                  "FromPort" : "22",
+                  "ToPort" : "22",
+                  "CidrIp" : "0.0.0.0/0"
+                  },
+                  {
+                  "IpProtocol" : "tcp",
+                  "FromPort" : "80",
+                  "ToPort" : "80",
+                  "CidrIp" : "0.0.0.0/0"
+                  }
+                ]
+            }
+        },
         "Ec2Instance": {
             "Type": "AWS::EC2::Instance",
             "Properties": {
@@ -78,11 +111,8 @@
                     "Ref": "KeyName"
                 }, 
                 "SecurityGroups": [
-                    "default"
-                ], 
-                "UserData": {
-                    "Fn::Base64": "80"
-                }
+                    { "Ref": "InstanceSecurityGroup" }
+                ]
             }
         }
     }
