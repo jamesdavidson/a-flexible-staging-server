@@ -41,6 +41,8 @@
   - name: ArchLinux quirk, enable IPv4 forwarding.
     sysctl: name=net.ipv4.ip_forward value=1 state=present
 
-  - name: Enable and start the Docker daemon.
-    service: name=docker state=started enabled=yes
+  - name: Enable the Docker daemon.
+    service: name=docker enabled=yes
 
+  - name: Restart the Docker daemon.
+    service: name=docker state=restarted
