@@ -37,3 +37,7 @@
 
   - name: Ensure the post-receive hook is in place.
     copy: src=post-receive.rb dest=/root/repo.git/hooks/post-receive owner=root group=root mode=0744
+
+  - name: Enable and start the Docker daemon.
+    service: name=docker state=started enabled=yes
+
