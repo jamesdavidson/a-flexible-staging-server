@@ -1,4 +1,18 @@
 {
+    "Parameters": {
+        "KeyName": {
+            "Description": "Name of an existing EC2 KeyPair to enable SSH access to the instance.", 
+            "Type": "String"
+        },
+        "Region": {
+            "Description": "Name of the AWS data center.", 
+            "Type": "String"
+        },
+        "AMI": {
+            "Description": "The identification number of the Linux AMI, for example: \"ami-8xb87dsf\".", 
+            "Type": "String"
+        }
+    }, 
     "Outputs": {
         "AZ": {
             "Description": "Availability Zone of the newly created EC2 instance", 
@@ -52,22 +66,9 @@
             }
         }
     }, 
-    "Parameters": {
-        "KeyName": {
-            "Description": "Name of an existing EC2 KeyPair to enable SSH access to the instance.", 
-            "Type": "String"
-        },
-        "Region": {
-            "Description": "Name of the AWS data center.", 
-            "Type": "String"
-        },
-        "AMI": {
-            "Description": "The identification number of the Linux AMI, for example: \"ami-8xb87dsf\".", 
-            "Type": "String"
-        }
-    }, 
     "Resources": {
         "Ec2Instance": {
+            "Type": "AWS::EC2::Instance",
             "Properties": {
                 "ImageId": {
                     "Ref": "AMI"
@@ -82,8 +83,7 @@
                 "UserData": {
                     "Fn::Base64": "80"
                 }
-            }, 
-            "Type": "AWS::EC2::Instance"
+            }
         }
     }
 }
