@@ -1,7 +1,7 @@
 ---
 keypair: mbp
 region: ap-southeast-2
-default_exposed_port: 3000
+default_exposed_port: 80
 archlinux_ami_id: ami-65d44a5f
 port_range_min: 33000
 port_range_max: 34000

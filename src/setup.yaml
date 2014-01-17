@@ -5,7 +5,7 @@
   vars_files:
     - parameters.yaml
   tasks:
-  - name: Launch ansible cloudformation example.
+  - name: Provision the AWS CloudFormation.
     cloudformation: stack_name="ansible-cloudformation"
                     state=present
                     region="{{ region }}"
@@ -18,13 +18,13 @@
         AMI: "{{ archlinux_ami_id }}"
     register: stack
 
-  - name: Add host to temporary inventory.
+  - name: Add the provisioned instance to temporary inventory.
     add_host: name={{ stack.stack_outputs['PublicIP'] }}
-              groups=just_created
+              groups=tmp
               ansible_ssh_user=root
               ansible_python_interpreter=/usr/bin/python2
 
-- hosts: just_created
+- hosts: tmp
   gather_facts: false
   vars_files:
     - parameters.yaml
