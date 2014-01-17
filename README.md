@@ -48,7 +48,7 @@ with all the security groups and access keys and stuff) and configure it to act
 as a git+docker server.
 
 ```bash
-ansible-playbook src/setup.yml -e keypair=YOUR_KEYPAIRS_ID
+cd src && ansible-playbook setup.yaml -e keypair=YOUR_KEYPAIRS_ID
 ```
 
 If the playbook runs successfully then you should see an IP address in the
