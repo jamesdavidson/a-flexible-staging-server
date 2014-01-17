@@ -28,8 +28,8 @@ end
 
 # Run the Docker image as a container
 begin
-#  system "docker run -n=true -p %d:80 %s" % [port, img_id]
-  container_id = %x{ docker run -d=true -n=true -p #{port}:80 #{image_id} 2>/dev/null }.split.last.chomp
+#  system "docker run -n=true -p %d:{{default_exposed_port}} %s" % [port, img_id]
+  container_id = %x{ docker run -d=true -n=true -p #{port}:{{default_exposed_port}} #{image_id} 2>/dev/null }.split.last.chomp
   puts "Container ID: %s." % container_id
 rescue
   puts "Uh oh, deploy failed."

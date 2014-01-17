@@ -1,0 +1,5 @@
+---
+keypair: mbp
+default_region: ap-southeast-2
+default_exposed_port: 3000
+

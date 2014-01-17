@@ -2,6 +2,8 @@
 - hosts: local
   connection: local
   gather_facts: false
+  vars_files:
+    - parameters.yaml
   tasks:
   - name: Launch ansible cloudformation example.
     cloudformation: stack_name="ansible-cloudformation"
@@ -22,6 +24,8 @@
 
 - hosts: just_created
   gather_facts: false
+  vars_files:
+    - parameters.yaml
   tasks:
   - name: Update the package manager.
     raw: pacman -Sy --noconfirm
