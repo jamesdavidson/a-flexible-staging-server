@@ -36,7 +36,7 @@
     unarchive: src=blank-repo.tar dest=/root
 
   - name: Ensure the post-receive hook is in place.
-    copy: src=post-receive.rb dest=/root/repo.git/hooks/post-receive owner=root group=root mode=0744
+    template: src=./post-receive.j2 dest=/root/repo.git/hooks/post-receive owner=root group=root mode=0744
 
   - name: ArchLinux quirk, enable IPv4 forwarding.
     sysctl: name=net.ipv4.ip_forward value=1 state=present
