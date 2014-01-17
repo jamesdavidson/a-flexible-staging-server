@@ -18,6 +18,7 @@ end
 
 # Build the Docker image, grab the ID.
 begin
+  puts "Pulling images from the repository and building may take a little while..."
   image_id = %x{ docker build -q=true #{path} 2> /dev/null }.split.last.chomp
   puts "Image ID: %s." % image_id
 rescue
