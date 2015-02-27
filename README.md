@@ -65,7 +65,7 @@ gets built and assigned a random TCP port. You can then access the container at
 http://instance-ip:port/.
 
 ```bash
-git remote add staging root@<hostname>:repo.git
+git remote add staging ec2-user@<hostname>:repo.git
 git push --force staging <branch>
 open http://ip-address:port/index.html
 ```

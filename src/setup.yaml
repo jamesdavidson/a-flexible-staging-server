@@ -29,15 +29,29 @@
   sudo: yes
   vars_files:
     - parameters.yaml
+  handlers:
+    - name: restart docker
+      service: name=docker state=restarted
   tasks:
   - name: Ensure Docker, Git and Ruby are installed.
     yum: state=installed name=docker,git,ruby
 
   - name: Ensure the Git repo exists.
-    unarchive: src=blank-repo.tar dest=/home/ubuntu
+    unarchive: src=blank-repo.tar dest=/home/ec2-user
 
   - name: Ensure the post-receive hook is in place.
-    template: src=./post-receive.j2 dest=/home/ubuntu/repo.git/hooks/post-receive owner=ubuntu group=ubuntu mode=0744
+    template: src=./post-receive.j2 dest=/home/ec2-user/repo.git/hooks/post-receive
 
-  - name: Start the Docker daemon.
-    service: name=docker enabled=yes state=started
+  - name: Chown the repo
+    file: state=directory recurse=yes owner=ec2-user group=ec2-user name=/home/ec2-user/repo.git
+
+  - name: Chmod +x the deploy script
+    file: mode=0774 name=/home/ec2-user/repo.git/hooks/post-receive
+
+  - name: Enable the Docker daemon.
+    service: name=docker enabled=yes
+    notify: restart docker
+
+  - name: Add the ec2-user to the docker group
+    user: name=ec2-user groups=ec2-user,docker
+    notify: restart docker
