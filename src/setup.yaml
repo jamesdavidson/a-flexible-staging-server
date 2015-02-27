@@ -6,7 +6,7 @@
     - parameters.yaml
   tasks:
   - name: Provision the AWS CloudFormation.
-    cloudformation: stack_name="ansible-cloudformation"
+    cloudformation: stack_name="ax9asdfsdf"
                     state=present
                     region="{{ region }}"
                     disable_rollback=yes
@@ -15,7 +15,7 @@
       template_parameters:
         KeyName: "{{ keypair }}"
         Region: "{{ region }}"
-        AMI: "{{ archlinux_ami_id }}"
+        AMI: "{{ linux_ami }}"
         PortMin: "{{ port_range_min }}"
         PortMax: "{{ port_range_max }}"
     register: stack
@@ -23,34 +23,21 @@
   - name: Add the provisioned instance to temporary inventory.
     add_host: name={{ stack.stack_outputs['PublicIP'] }}
               groups=tmp
-              ansible_ssh_user=root
-              ansible_python_interpreter=/usr/bin/python2
+              ansible_ssh_user=ubuntu
 
 - hosts: tmp
   gather_facts: false
   vars_files:
     - parameters.yaml
   tasks:
-  - name: Update the package manager.
-    raw: pacman -Sy --noconfirm
-
-  - name: Install Python2.
-    raw: pacman -S --noconfirm python2
-
   - name: Ensure Docker, Git and Ruby are installed.
-    pacman: name=docker,git,ruby state=installed
+    apt: state=installed name=docker,git,ruby
 
   - name: Ensure the Git repo exists.
-    unarchive: src=blank-repo.tar dest=/root
+    unarchive: src=blank-repo.tar dest=/home/ubuntu
 
   - name: Ensure the post-receive hook is in place.
-    template: src=./post-receive.j2 dest=/root/repo.git/hooks/post-receive owner=root group=root mode=0744
+    template: src=./post-receive.j2 dest=/home/ubuntu/repo.git/hooks/post-receive owner=ubuntu group=ubuntu mode=0744
 
-  - name: ArchLinux quirk, enable IPv4 forwarding.
-    sysctl: name=net.ipv4.ip_forward value=1 state=present
-
-  - name: Enable the Docker daemon.
-    service: name=docker enabled=yes
-
-  - name: Restart the Docker daemon.
-    service: name=docker state=restarted
+  - name: Start the Docker daemon.
+    service: name=docker enabled=yes state=started

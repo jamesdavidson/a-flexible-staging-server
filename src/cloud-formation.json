@@ -1,80 +1,97 @@
 {
     "Parameters": {
         "KeyName": {
-            "Description": "Name of an existing EC2 KeyPair to enable SSH access to the instance.", 
+            "Description": "Name of an existing EC2 KeyPair to enable SSH access to the instance.",
             "Type": "String"
         },
         "Region": {
-            "Description": "Name of the AWS data center.", 
+            "Description": "Name of the AWS data center.",
             "Type": "String"
         },
         "PortMax": {
-            "Description": "Upper end of the exposed port range.", 
+            "Description": "Upper end of the exposed port range.",
             "Type": "String"
         },
         "PortMin": {
-            "Description": "Lower end of the exposed port range..", 
+            "Description": "Lower end of the exposed port range..",
             "Type": "String"
         },
         "AMI": {
-            "Description": "The identification number of the Linux AMI, for example: \"ami-8xb87dsf\".", 
+            "Description": "The identification number of the Linux AMI, for example: \"ami-8xb87dsf\".",
             "Type": "String"
         }
-    }, 
+    },
     "Outputs": {
         "AZ": {
-            "Description": "Availability Zone of the newly created EC2 instance", 
+            "Description": "Availability Zone of the newly created EC2 instance",
             "Value": {
                 "Fn::GetAtt": [
-                    "Ec2Instance", 
+                    "Ec2Instance",
                     "AvailabilityZone"
                 ]
             }
-        }, 
+        },
         "InstanceId": {
-            "Description": "InstanceId of the newly created EC2 instance", 
+            "Description": "InstanceId of the newly created EC2 instance",
             "Value": {
                 "Ref": "Ec2Instance"
             }
-        }, 
+        },
         "PrivateDNS": {
-            "Description": "Private DNSName of the newly created EC2 instance", 
+            "Description": "Private DNSName of the newly created EC2 instance",
             "Value": {
                 "Fn::GetAtt": [
-                    "Ec2Instance", 
+                    "Ec2Instance",
                     "PrivateDnsName"
                 ]
             }
-        }, 
+        },
         "PrivateIP": {
-            "Description": "Private IP address of the newly created EC2 instance", 
+            "Description": "Private IP address of the newly created EC2 instance",
             "Value": {
                 "Fn::GetAtt": [
-                    "Ec2Instance", 
+                    "Ec2Instance",
                     "PrivateIp"
                 ]
             }
-        }, 
+        },
         "PublicDNS": {
-            "Description": "Public DNSName of the newly created EC2 instance", 
+            "Description": "Public DNSName of the newly created EC2 instance",
             "Value": {
                 "Fn::GetAtt": [
-                    "Ec2Instance", 
+                    "Ec2Instance",
                     "PublicDnsName"
                 ]
             }
-        }, 
+        },
         "PublicIP": {
-            "Description": "Public IP address of the newly created EC2 instance", 
+            "Description": "Public IP address of the newly created EC2 instance",
             "Value": {
                 "Fn::GetAtt": [
-                    "Ec2Instance", 
+                    "Ec2Instance",
                     "PublicIp"
                 ]
             }
         }
-    }, 
+    },
     "Resources": {
+      "VPC" : {
+        "Type" : "AWS::EC2::VPC",
+        "Properties" : {
+          "CidrBlock" : "10.0.0.0/16",
+          "EnableDnsSupport" : true,
+          "EnableDnsHostnames" : true,
+          "Tags" : [ {"Key" : "Application", "Value" : { "Ref" : "AWS::StackId"} } ]
+        }
+      },
+      "PublicSubnet" : {
+        "Type" : "AWS::EC2::Subnet",
+        "Properties" : {
+          "VpcId" : { "Ref" : "VPC" },
+          "CidrBlock" : "10.0.0.0/24",
+          "Tags" : [ {"Key" : "Application", "Value" : { "Ref" : "AWS::StackId"} } ]
+        }
+      },
         "InstanceSecurityGroup": {
             "Type": "AWS::EC2::SecurityGroup",
             "Properties": {
@@ -103,13 +120,14 @@
         "Ec2Instance": {
             "Type": "AWS::EC2::Instance",
             "Properties": {
+                "SubnetId" : { "Ref" : "PublicSubnet" },
                 "ImageId": {
                     "Ref": "AMI"
-                }, 
-                "InstanceType": "t1.micro", 
+                },
+                "InstanceType": "t2.micro",
                 "KeyName": {
                     "Ref": "KeyName"
-                }, 
+                },
                 "SecurityGroups": [
                     { "Ref": "InstanceSecurityGroup" }
                 ]
