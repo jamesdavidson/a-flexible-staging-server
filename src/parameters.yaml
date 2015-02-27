@@ -1,5 +1,5 @@
 ---
-keypair: mbp
+keypair: james
 region: ap-southeast-2
 default_exposed_port: 80
 linux_ami: ami-abeb9e91  # NB: this may depend on the region.

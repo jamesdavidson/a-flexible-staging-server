@@ -14,20 +14,24 @@
     args:
       template_parameters:
         KeyName: "{{ keypair }}"
+        PortMin: "{{ port_range_min }}"
+        PortMax: "{{ port_range_max }}"
+
     register: stack
 
   - name: Add the provisioned instance to temporary inventory.
     add_host: name={{ stack.stack_outputs['PublicIP'] }}
               groups="tmp"
-              ansible_ssh_user="ubuntu"
+              ansible_ssh_user="ec2-user"
 
 - hosts: tmp
   gather_facts: false
+  sudo: yes
   vars_files:
     - parameters.yaml
   tasks:
   - name: Ensure Docker, Git and Ruby are installed.
-    apt: state=installed name=docker,git,ruby
+    yum: state=installed name=docker,git,ruby
 
   - name: Ensure the Git repo exists.
     unarchive: src=blank-repo.tar dest=/home/ubuntu
