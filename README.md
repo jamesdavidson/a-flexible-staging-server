@@ -19,7 +19,37 @@ your monthly bill from Amazon! That said however, the resources are neatly
 bundled up as a single CloudFormation and can be easily cleaned up (you just
 have to remember to do it).
 
-### Getting Started
+### Usage
+
+Firstly, check the config options in src/parameters.yaml. Then, use Ansible to
+provision the CloudFormation (a single Linux instance, with all the security
+groups and access keys and stuff) and configure it to act as a git+docker
+server.
+
+```bash
+cd src && ansible-playbook setup.yaml
+```
+
+If the playbook runs successfully then you should see an IP address in the
+output stream. Use this to set up a git remote in your project's repository.
+Ensure that your project has a Dockerfile in its root directory that exposes its
+functionality on port 80. Git push to the remote repository and wait as it gets
+built and assigned a TCP port. You can then access the container at
+http://<instance-ip>:port/.
+
+```bash
+git remote add staging ec2-user@<instance-ip>:repo.git
+git push --force staging <branch>
+open http://<instance-ip>:port/
+```
+
+Your Dockerfile could look like this:
+```
+FROM nginx
+COPY html_assets /usr/share/nginx/html
+```
+
+### Installation
 
 Just install Python2 using your package manager, then install Pip using
 easy_install, then install Ansible and Boto using Pip.
@@ -46,29 +76,6 @@ more information: http://docs.pythonboto.org/en/latest/boto_config_tut.html.
 If you have misplaced your credentials, you may need to generate new ones. You
 can do this in the IAM section of the management console:
 http://console.aws.amazon.com/iam.
-
-### Usage
-
-Firstly, check the config options in src/parameters.yaml. Then, use Ansible to
-provision the CloudFormation (a single Linux instance, with all the security
-groups and access keys and stuff) and configure it to act as a git+docker
-server.
-
-```bash
-cd src && ansible-playbook setup.yaml
-```
-
-If the playbook runs successfully then you should see an IP address in the
-output stream. Use this to set up a git remote in your project's repository and
-then push some code which has a Dockerfile in its root directory. Wait as it
-gets built and assigned a random TCP port. You can then access the container at
-http://instance-ip:port/.
-
-```bash
-git remote add staging ec2-user@<hostname>:repo.git
-git push --force staging <branch>
-open http://ip-address:port/index.html
-```
 
 ### Notes
 

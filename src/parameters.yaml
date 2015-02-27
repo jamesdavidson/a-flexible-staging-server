@@ -1,7 +1,6 @@
 ---
 keypair: james
 region: ap-southeast-2
-default_exposed_port: 80
-linux_ami: ami-abeb9e91  # NB: this may depend on the region.
+default_exposed_port: 80 # on which port will containerised processes listen?
 port_range_min: 33000
 port_range_max: 34000
