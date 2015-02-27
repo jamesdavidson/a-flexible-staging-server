@@ -35,12 +35,12 @@ output stream. Use this to set up a git remote in your project's repository.
 Ensure that your project has a Dockerfile in its root directory that exposes its
 functionality on port 80. Git push to the remote repository and wait as it gets
 built and assigned a TCP port. You can then access the container at
-http://<instance-ip>:port/.
+http://ip-address:port/.
 
 ```bash
-git remote add staging ec2-user@<instance-ip>:repo.git
+git remote add staging ec2-user@ip-address:repo.git
 git push --force staging <branch>
-open http://<instance-ip>:port/
+open http://ip-address:port/
 ```
 
 Your Dockerfile could look like this:
