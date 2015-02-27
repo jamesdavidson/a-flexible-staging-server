@@ -6,7 +6,7 @@
     - parameters.yaml
   tasks:
   - name: Provision the AWS CloudFormation.
-    cloudformation: stack_name="a1jk23x9asdfsdf"
+    cloudformation: stack_name="a1jz2asd91df"
                     state="present"
                     region="{{ region }}"
                     disable_rollback="yes"
@@ -14,9 +14,6 @@
     args:
       template_parameters:
         KeyName: "{{ keypair }}"
-        AMI: "{{ linux_ami }}"
-        PortMin: "{{ port_range_min }}"
-        PortMax: "{{ port_range_max }}"
     register: stack
 
   - name: Add the provisioned instance to temporary inventory.
