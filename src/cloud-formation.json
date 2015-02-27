@@ -1,11 +1,11 @@
 {
     "Parameters": {
-        "KeyName": {
-            "Description": "Name of an existing EC2 KeyPair to enable SSH access to the instance.",
+        "AMI": {
+            "Description": "The identification number of the Linux AMI, for example: \"ami-8xb87dsf\".",
             "Type": "String"
         },
-        "Region": {
-            "Description": "Name of the AWS data center.",
+        "KeyName": {
+            "Description": "Name of an existing EC2 KeyPair to enable SSH access to the instance.",
             "Type": "String"
         },
         "PortMax": {
@@ -15,112 +15,11 @@
         "PortMin": {
             "Description": "Lower end of the exposed port range..",
             "Type": "String"
-        },
-        "AMI": {
-            "Description": "The identification number of the Linux AMI, for example: \"ami-8xb87dsf\".",
-            "Type": "String"
-        }
-    },
-    "Outputs": {
-        "AZ": {
-            "Description": "Availability Zone of the newly created EC2 instance",
-            "Value": {
-                "Fn::GetAtt": [
-                    "Ec2Instance",
-                    "AvailabilityZone"
-                ]
-            }
-        },
-        "InstanceId": {
-            "Description": "InstanceId of the newly created EC2 instance",
-            "Value": {
-                "Ref": "Ec2Instance"
-            }
-        },
-        "PrivateDNS": {
-            "Description": "Private DNSName of the newly created EC2 instance",
-            "Value": {
-                "Fn::GetAtt": [
-                    "Ec2Instance",
-                    "PrivateDnsName"
-                ]
-            }
-        },
-        "PrivateIP": {
-            "Description": "Private IP address of the newly created EC2 instance",
-            "Value": {
-                "Fn::GetAtt": [
-                    "Ec2Instance",
-                    "PrivateIp"
-                ]
-            }
-        },
-        "PublicDNS": {
-            "Description": "Public DNSName of the newly created EC2 instance",
-            "Value": {
-                "Fn::GetAtt": [
-                    "Ec2Instance",
-                    "PublicDnsName"
-                ]
-            }
-        },
-        "PublicIP": {
-            "Description": "Public IP address of the newly created EC2 instance",
-            "Value": {
-                "Fn::GetAtt": [
-                    "Ec2Instance",
-                    "PublicIp"
-                ]
-            }
         }
     },
     "Resources": {
-      "VPC" : {
-        "Type" : "AWS::EC2::VPC",
-        "Properties" : {
-          "CidrBlock" : "10.0.0.0/16",
-          "EnableDnsSupport" : true,
-          "EnableDnsHostnames" : true,
-          "Tags" : [ {"Key" : "Application", "Value" : { "Ref" : "AWS::StackId"} } ]
-        }
-      },
-      "PublicSubnet" : {
-        "Type" : "AWS::EC2::Subnet",
-        "Properties" : {
-          "VpcId" : { "Ref" : "VPC" },
-          "CidrBlock" : "10.0.0.0/24",
-          "Tags" : [ {"Key" : "Application", "Value" : { "Ref" : "AWS::StackId"} } ]
-        }
-      },
-        "InstanceSecurityGroup": {
-            "Type": "AWS::EC2::SecurityGroup",
-            "Properties": {
-                "GroupDescription": "Enable access on the port range, SSH and HTTP.",
-                "SecurityGroupIngress": [ {
-                  "IpProtocol" : "tcp",
-                  "FromPort" : { "Ref" : "PortMin" },
-                  "ToPort" : { "Ref" : "PortMax" },
-                  "CidrIp" : "0.0.0.0/0"
-                  },
-                  {
-                  "IpProtocol" : "tcp",
-                  "FromPort" : "22",
-                  "ToPort" : "22",
-                  "CidrIp" : "0.0.0.0/0"
-                  },
-                  {
-                  "IpProtocol" : "tcp",
-                  "FromPort" : "80",
-                  "ToPort" : "80",
-                  "CidrIp" : "0.0.0.0/0"
-                  }
-                ]
-            }
-        },
         "Ec2Instance": {
-            "Type": "AWS::EC2::Instance",
             "Properties": {
-                "SubnetId" : { "Ref" : "PublicSubnet" },
                 "ImageId": {
                     "Ref": "AMI"
                 },
@@ -129,7 +28,90 @@
                     "Ref": "KeyName"
                 },
                 "SecurityGroups": [
-                    { "Ref": "InstanceSecurityGroup" }
+                    {
+                        "Fn::GetAtt": [
+                            "InstanceSecurityGroup",
+                            "GroupId"
+                        ]
+                    }
+                ],
+                "SubnetId": {
+                    "Ref": "PublicSubnet"
+                }
+            },
+            "Type": "AWS::EC2::Instance"
+        },
+        "InstanceSecurityGroup": {
+            "Properties": {
+                "GroupDescription": "Enable access on the port range, SSH and HTTP.",
+                "SecurityGroupIngress": [
+                    {
+                        "CidrIp": "0.0.0.0/0",
+                        "FromPort": {
+                            "Ref": "PortMin"
+                        },
+                        "IpProtocol": "tcp",
+                        "ToPort": {
+                            "Ref": "PortMax"
+                        }
+                    },
+                    {
+                        "CidrIp": "0.0.0.0/0",
+                        "FromPort": "22",
+                        "IpProtocol": "tcp",
+                        "ToPort": "22"
+                    },
+                    {
+                        "CidrIp": "0.0.0.0/0",
+                        "FromPort": "80",
+                        "IpProtocol": "tcp",
+                        "ToPort": "80"
+                    }
+                ]
+            },
+            "Type": "AWS::EC2::SecurityGroup"
+        },
+        "PublicSubnet": {
+            "Properties": {
+                "CidrBlock": "10.0.0.0/24",
+                "Tags": [
+                    {
+                        "Key": "Application",
+                        "Value": {
+                            "Ref": "AWS::StackId"
+                        }
+                    }
+                ],
+                "VpcId": {
+                    "Ref": "VPC"
+                }
+            },
+            "Type": "AWS::EC2::Subnet"
+        },
+        "VPC": {
+            "Properties": {
+                "CidrBlock": "10.0.0.0/16",
+                "EnableDnsHostnames": true,
+                "EnableDnsSupport": true,
+                "Tags": [
+                    {
+                        "Key": "Application",
+                        "Value": {
+                            "Ref": "AWS::StackId"
+                        }
+                    }
+                ]
+            },
+            "Type": "AWS::EC2::VPC"
+        }
+    },
+    "Outputs": {
+        "PublicIP": {
+            "Description": "Public IP address of the newly created EC2 instance",
+            "Value": {
+                "Fn::GetAtt": [
+                    "Ec2Instance",
+                    "PublicIp"
                 ]
             }
         }

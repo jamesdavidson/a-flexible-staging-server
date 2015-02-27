@@ -6,15 +6,14 @@
     - parameters.yaml
   tasks:
   - name: Provision the AWS CloudFormation.
-    cloudformation: stack_name="ax9asdfsdf"
-                    state=present
+    cloudformation: stack_name="a1jk23x9asdfsdf"
+                    state="present"
                     region="{{ region }}"
-                    disable_rollback=yes
-                    template=cloud-formation.json
+                    disable_rollback="yes"
+                    template="cloud-formation.json"
     args:
       template_parameters:
         KeyName: "{{ keypair }}"
-        Region: "{{ region }}"
         AMI: "{{ linux_ami }}"
         PortMin: "{{ port_range_min }}"
         PortMax: "{{ port_range_max }}"
@@ -22,8 +21,8 @@
 
   - name: Add the provisioned instance to temporary inventory.
     add_host: name={{ stack.stack_outputs['PublicIP'] }}
-              groups=tmp
-              ansible_ssh_user=ubuntu
+              groups="tmp"
+              ansible_ssh_user="ubuntu"
 
 - hosts: tmp
   gather_facts: false
